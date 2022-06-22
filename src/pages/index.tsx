@@ -1,27 +1,51 @@
-import { Button, Flex, Stack } from "@chakra-ui/react";
+import { Button, Flex, Stack, Text } from "@chakra-ui/react";
 import { Input } from "../components/Input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-
-type SignInDate = {
-  email: string;
-  password: string;
-};
+import { useRouter } from "next/router";
+import { useMutation } from "react-query";
+import {
+  useAuthenticate,
+  useAuthenticateMutation,
+  UserAuthCredentials,
+} from "../services/hooks/useAuthentication";
+import { json } from "stream/consumers";
+import { stringify } from "querystring";
+import { useState } from "react";
+import { AxiosError } from "axios";
 
 const sigInFormSchema = yup.object().shape({
-  email: yup.string().required('E-mail Obrigatório.').email('E-mail Inválido.'),
-  password: yup.string().required('Senha Obrigatória.'),
+  userName: yup.string().required("Usuário Obrigatório."),
+  password: yup.string().required("Senha Obrigatória."),
 });
 
 const Home = () => {
-  const { register, handleSubmit, formState } = useForm<SignInDate>({
+  const router = useRouter();
+  const [errorLogin, setErrorLogin] = useState("");
+  const getTokenMutation = useAuthenticateMutation();
+
+  const { register, handleSubmit, formState } = useForm<UserAuthCredentials>({
     resolver: yupResolver(sigInFormSchema),
   });
 
-  const handleSignIn: SubmitHandler<SignInDate> = async (values, event) => {
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    console.log(values);
+  const handleSignIn: SubmitHandler<UserAuthCredentials> = async (
+    values,
+    event
+  ) => {
+    const response = await getTokenMutation.mutateAsync(values);
+
+    console.log(response);
+
+    if (response.tokenError != undefined) {
+      const mesage = response.tokenError.response?.data.message;
+      if (mesage != undefined) {
+        setErrorLogin(mesage.toString());
+      }
+    } 
+    if (response.token!= undefined) {       
+      setErrorLogin(response.token.data.token);
+    } //router.push("/dashboard");
   };
 
   return (
@@ -36,12 +60,15 @@ const Home = () => {
         flexDir="column"
         onSubmit={handleSubmit(handleSignIn)}
       >
+        <Text align={"center"} justifyContent="center" color={"red.300"}>
+          {errorLogin}
+        </Text>
         <Stack spacing={4}>
           <Input
-            label="E-mail"
-            type="email"
-            error={formState.errors.email}
-            {...register('email')}
+            label="Usuário"
+            type="text"
+            error={formState.errors.userName}
+            {...register("userName")}
           ></Input>
           <Input
             label="Senha"

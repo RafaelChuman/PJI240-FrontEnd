@@ -15,6 +15,10 @@ import { SideBar } from "../../components/SideBar";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useMutation } from "react-query";
+import { api } from "../../services/api";
+import { queryClient } from "../../services/queryClient";
+import { useRouter } from "next/router";
 
 type CreatUserFormData = {
   name: string;
@@ -36,13 +40,32 @@ const signInFormSchema = yup.object().shape({
 });
 
 export default function CreateUser() {
+  const router = useRouter();
+
+  const creatUser = useMutation(
+    async (user: CreatUserFormData) => {
+      const response = await api.post("users", {
+        user: {
+          ...user,
+        },
+      });
+
+      return response;
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("users");
+      },
+    }
+  );
+
   const { register, handleSubmit, formState } = useForm<CreatUserFormData>({
     resolver: yupResolver(signInFormSchema),
   });
 
   const handleCreateUser: SubmitHandler<CreatUserFormData> = async (values) => {
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    console.log(values);
+    await creatUser.mutateAsync(values);
+    router.push("/users");
   };
 
   return (
@@ -68,12 +91,12 @@ export default function CreateUser() {
               <Input
                 label="Nome Completo"
                 error={formState.errors.name}
-                {...register('name')}
+                {...register("name")}
               ></Input>
               <Input
                 label="email"
                 error={formState.errors.email}
-                {...register('email')}
+                {...register("email")}
               ></Input>
             </SimpleGrid>
             <SimpleGrid minChildWidth={"240px"} spacing={["6", "8"]} w="100%">
@@ -81,7 +104,7 @@ export default function CreateUser() {
                 type="password"
                 label="Senha"
                 error={formState.errors.password}
-                {...register('password')}
+                {...register("password")}
               ></Input>
               <Input
                 type="password"
@@ -96,9 +119,13 @@ export default function CreateUser() {
               <Link href={"/users"} passHref>
                 <Button colorScheme={"whiteAlpha"}>Cancelar</Button>
               </Link>
-              <Button type="submit" colorScheme={"pink"}
-              isLoading={formState.isSubmitting}
-              >Salvar</Button>
+              <Button
+                type="submit"
+                colorScheme={"pink"}
+                isLoading={formState.isSubmitting}
+              >
+                Salvar
+              </Button>
             </HStack>
           </Flex>
         </Box>

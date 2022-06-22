@@ -9,28 +9,34 @@ import {
   Text,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { useEffect } from "react";
 import { RiAddLine } from "react-icons/ri";
 import { Header } from "../../components/Header";
 import { Pagination } from "../../components/Pagination";
 import { SideBar } from "../../components/SideBar";
 import { UserTable } from "./UserTable";
-import { useQuery } from "react-query";
+import { User, useUsers } from "../../services/hooks/useUsers";
+import { getPaginatedData } from "../../services/api";
+import { useContext, useEffect, useState } from "react";
+import { set } from "react-hook-form";
+import { AuthContext } from "../../services/hooks/useAuthentication";
+
+function renderUserList(userPage: number, isWideVersion: boolean) {}
+
+const numberOfItensPerPage = 10;
 
 export default function UserList() {
-  const { data, isLoading, error } = useQuery("users", async () => {
-    console.log("********************")
-    const response = await fetch('http://localhost:3333/users');
-    
-    const resp = await response.json();
-    
-    console.log(resp)
-  });
+  const { data, isLoading, isFetching, error, refetch } = useUsers();
+
+  const {SignIn, isAuthenticated} = useContext(AuthContext);
+
+  const [userCurrentPage, setUserCurrentPage] = useState(1);
 
   const isWideVersion = useBreakpointValue({
     base: false,
     lg: true,
   });
+
+  const users = getPaginatedData<User>(data, userCurrentPage, numberOfItensPerPage);
 
   return (
     <Box>
@@ -40,8 +46,10 @@ export default function UserList() {
         <Box flex="1" borderRadius={8} bg="gray.800" p="8">
           <Flex mb="8" justify="space-between" align={"center"}>
             <Heading size="lg" fontWeight={"normal"}>
-              {" "}
               Usuários
+              {!isLoading && isFetching && (
+                <Spinner size={"sm"} color="gray.500" ml={4} />
+              )}
             </Heading>
             <Link href={"/users/create"} passHref>
               <Button
@@ -62,15 +70,22 @@ export default function UserList() {
               <Spinner />
             </Flex>
           ) : error ? (
-             <Flex justify={"center"}>
-               <Text>Falha ao Obter Dados dos Usuários</Text>
-             </Flex>
+            <Flex justify={"center"}>
+              <Text>Falha ao Obter Dados dos Usuários</Text>
+            </Flex>
           ) : (
-            <>
-              <UserTable isWideVersion={isWideVersion} />
+            users && (
+              <>
+                <UserTable userData={users} isWideVersion={isWideVersion} />
 
-              <Pagination></Pagination>
-            </>
+                <Pagination
+                  totalCountOfRegisters={users.length}
+                  currentPage={userCurrentPage}
+                  registersPerPage={numberOfItensPerPage}
+                  onPageClick={setUserCurrentPage}
+                ></Pagination>
+              </>
+            )
           )}
         </Box>
       </Flex>
