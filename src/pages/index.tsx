@@ -4,16 +4,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/router";
-import { useMutation } from "react-query";
-import {
-  useAuthenticate,
-  useAuthenticateMutation,
-  UserAuthCredentials,
-} from "../services/hooks/useAuthentication";
-import { json } from "stream/consumers";
-import { stringify } from "querystring";
-import { useState } from "react";
-import { AxiosError } from "axios";
+import {AuthContext, AuthProvider, useAuthenticateMutation, UserAuthCredentials,UserSignInCredentials} from "../services/hooks/useAuthentication";
+import { useContext, useState } from "react";
 
 const sigInFormSchema = yup.object().shape({
   userName: yup.string().required("Usuário Obrigatório."),
@@ -23,18 +15,16 @@ const sigInFormSchema = yup.object().shape({
 const Home = () => {
   const router = useRouter();
   const [errorLogin, setErrorLogin] = useState("");
-  const getTokenMutation = useAuthenticateMutation();
+  //const getTokenMutation = useAuthenticateMutation();
+  const {SignIn} = useContext(AuthContext);
 
-  const { register, handleSubmit, formState } = useForm<UserAuthCredentials>({
+  const { register, handleSubmit, formState } = useForm<UserSignInCredentials>({
     resolver: yupResolver(sigInFormSchema),
   });
 
-  const handleSignIn: SubmitHandler<UserAuthCredentials> = async (
-    values,
-    event
-  ) => {
-    const response = await getTokenMutation.mutateAsync(values);
-
+  const handleSignIn: SubmitHandler<UserSignInCredentials> = async (values) => {
+    const response = await SignIn(values);
+    
     console.log(response);
 
     if (response.tokenError != undefined) {
@@ -45,7 +35,7 @@ const Home = () => {
     } 
     if (response.token!= undefined) {       
       setErrorLogin(response.token.data.token);
-    } //router.push("/dashboard");
+    } 
   };
 
   return (

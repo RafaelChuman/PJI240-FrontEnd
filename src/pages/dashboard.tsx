@@ -1,15 +1,10 @@
-import {
-  Box,
-  flattenTokens,
-  Flex,
-  SimpleGrid,
-  Text,
-  theme,
-} from "@chakra-ui/react";
+import { Box, Flex,  SimpleGrid,  Text,  theme,} from "@chakra-ui/react";
 import { Header } from "../components/Header";
 import { SideBar } from "../components/SideBar";
 import dynamic from "next/dynamic";
 import { ApexOptions } from "apexcharts";
+import { useContext } from "react";
+import { AuthContext } from "../services/hooks/useAuthentication";
 
 const Chart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -74,8 +69,12 @@ const series = [
 ];
 
 export default function Dashboard() {
+
+  const {userToken} = useContext(AuthContext);
+
   return (
     <Flex direction={"column"} h="100vh">
+        <Text>{userToken?.token}</Text>
       <Header></Header>
       <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
         <SideBar />
