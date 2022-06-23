@@ -1,9 +1,18 @@
 import { Box, Flex, Text, Avatar } from "@chakra-ui/react";
+import { useContext } from "react";
+import { AuthContext, SignOut} from "../../services/hooks/useAuthentication";
 interface ProfileProps {
   showProfileData?: boolean;
 }
 
+
+
+
 export function Profile({ showProfileData = true }: ProfileProps) {
+  function HandleSignOut(){
+    SignOut();
+  }
+
   return (
     <Flex align={"center"} ml="auto">
       {showProfileData && (
@@ -15,6 +24,7 @@ export function Profile({ showProfileData = true }: ProfileProps) {
         </Box>
       )}
       <Avatar
+        onClick={HandleSignOut}
         size={"md"}
         name="Chuman"
         src="http://github.com/rafaelChuman.png"

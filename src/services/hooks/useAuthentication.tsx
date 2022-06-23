@@ -3,8 +3,10 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { api } from "../api";
 import Router from "next/router";
-import { setCookie, parseCookies } from "nookies";
+import { setCookie, parseCookies, destroyCookie } from "nookies";
 import { User } from "./useUsers";
+import { GetServerSidePropsContext, NextPageContext } from "next";
+import { deserialize } from "v8";
 
 export interface TokenError {
   message: string;
@@ -35,6 +37,19 @@ export interface UserSignInCredentials {
   password: string;
 }
 
+//let authChanel :BroadcastChannel;
+
+export function SignOut(context?: GetServerSidePropsContext) {
+  destroyCookie(context, "pji240.token");
+  destroyCookie(context, "pji240.userName");
+
+  //authChanel.postMessage("signOut");
+
+  if (process.browser) {
+    Router.push("/");
+  }
+}
+
 export async function getToken({
   userName,
   password,
@@ -56,8 +71,6 @@ export async function getToken({
       response.tokenError = error;
     });
 
- 
-  
   if (resp) {
     api.defaults.headers.common["authorization"] = resp.data.token;
   }
@@ -75,16 +88,39 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [userToken, setUserToken] = useState<Token>();
   const isAuthenticated = !!userToken;
 
+  // useEffect(() => {
+
+  //   authChanel = new BroadcastChannel("auth");
+  //   authChanel.onmessage = (message) =>{
+  //     switch (message.data){
+  //       case 'signOut':
+  //         SignOut();
+  //         break;
+  //       case 'signIn':
+  //           Router.push('/dashboard')
+  //           break;
+  //       default:
+  //         break;
+  //     }
+  //   }
+  // });
+
   useEffect(() => {
     const { "pji240.token": token } = parseCookies();
     const { "pji240.userName": userName } = parseCookies();
 
     if (token) {
-      try {
-        api.post<User>("users", { userName: userName }).then((response) => {
-          setUserToken({token, user:{userName}});          
+      api
+        .get<User>(`users/?userName=${userName}`)
+        .then((response) => {
+          const { "pji240.token": token } = parseCookies();
+          const { "pji240.userName": userName } = parseCookies();
+
+          setUserToken({ token, user: { userName } });
+        })
+        .catch(() => {
+          SignOut();
         });
-      } catch (e) {}
     }
   }, []);
 
@@ -101,17 +137,28 @@ export function AuthProvider({ children }: AuthProviderProps) {
         maxAge: 60 * 60 * 24 * 38, //30 dias
         path: "/",
       });
-      setCookie(undefined, "pji240.token", response.token.data.user.userName, {
-        maxAge: 60 * 60 * 24 * 38, //30 dias
-        path: "/",
-      });
+      setCookie(
+        undefined,
+        "pji240.userName",
+        response.token.data.user.userName,
+        {
+          maxAge: 60 * 60 * 24 * 38, //30 dias
+          path: "/",
+        }
+      );
+
+      //authChanel.postMessage('signIn');
+
+
       Router.push("/dashboard");
+
+      
     }
     return response;
   }
 
   return (
-    <AuthContext.Provider value={{ SignIn, isAuthenticated, userToken }}>
+    <AuthContext.Provider value={{ SignIn,  isAuthenticated, userToken }}>
       {children}
     </AuthContext.Provider>
   );

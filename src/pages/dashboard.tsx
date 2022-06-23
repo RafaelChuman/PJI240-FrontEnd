@@ -1,10 +1,12 @@
-import { Box, Flex,  SimpleGrid,  Text,  theme,} from "@chakra-ui/react";
+import { Box, Flex, SimpleGrid, Text, theme } from "@chakra-ui/react";
 import { Header } from "../components/Header";
 import { SideBar } from "../components/SideBar";
 import dynamic from "next/dynamic";
 import { ApexOptions } from "apexcharts";
 import { useContext } from "react";
 import { AuthContext } from "../services/hooks/useAuthentication";
+import { withSSRAuth } from "../utils/withSSRAuth";
+import { setupAPIClient } from "../services/api";
 
 const Chart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -69,12 +71,11 @@ const series = [
 ];
 
 export default function Dashboard() {
-
-  const {userToken} = useContext(AuthContext);
+  const { userToken } = useContext(AuthContext);
 
   return (
     <Flex direction={"column"} h="100vh">
-        <Text>{userToken?.token}</Text>
+      <Text>{userToken?.token}</Text>
       <Header></Header>
       <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
         <SideBar />
@@ -85,13 +86,13 @@ export default function Dashboard() {
           minChildWidth="320px"
           alignItems={"flex-start"}
         >
-          <Box padding={["6","8"]} bg="gray.800" borderRadius={8} pb="4">
+          <Box padding={["6", "8"]} bg="gray.800" borderRadius={8} pb="4">
             <Text fontSize={"large"} mb="4">
               Incritos da Semana
             </Text>
             <Chart type="area" height={160} options={options} series={series} />
           </Box>
-          <Box padding={["6","8"]}  bg="gray.800" borderRadius={8}>
+          <Box padding={["6", "8"]} bg="gray.800" borderRadius={8}>
             <Text fontSize={"large"} mb="4">
               Taxa de Abertura
             </Text>
@@ -102,3 +103,13 @@ export default function Dashboard() {
     </Flex>
   );
 }
+
+export const getServerSideProps = withSSRAuth(async (context) => {
+  const api = setupAPIClient(context);
+
+  await api.get("users");
+
+  return {
+    props: {},
+  };
+});

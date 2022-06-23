@@ -7,9 +7,6 @@ export function Searchbox() {
 const [search, setSearch] = useState('');
 
 const searInputRef = useRef<HTMLInputElement>(null);
-
-console.log(searInputRef.current?.value);
-
   return (
     <Flex
       as="label"

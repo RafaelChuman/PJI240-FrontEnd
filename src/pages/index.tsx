@@ -4,8 +4,17 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/router";
-import {AuthContext, AuthProvider, useAuthenticateMutation, UserAuthCredentials,UserSignInCredentials} from "../services/hooks/useAuthentication";
+import {
+  AuthContext,
+  AuthProvider,
+  useAuthenticateMutation,
+  UserAuthCredentials,
+  UserSignInCredentials,
+} from "../services/hooks/useAuthentication";
 import { useContext, useState } from "react";
+import { GetServerSideProps } from "next";
+import { parseCookies } from "nookies";
+import { withSSRGuest } from "../utils/withSSRGuest";
 
 const sigInFormSchema = yup.object().shape({
   userName: yup.string().required("Usuário Obrigatório."),
@@ -16,7 +25,7 @@ const Home = () => {
   const router = useRouter();
   const [errorLogin, setErrorLogin] = useState("");
   //const getTokenMutation = useAuthenticateMutation();
-  const {SignIn} = useContext(AuthContext);
+  const { SignIn } = useContext(AuthContext);
 
   const { register, handleSubmit, formState } = useForm<UserSignInCredentials>({
     resolver: yupResolver(sigInFormSchema),
@@ -24,7 +33,7 @@ const Home = () => {
 
   const handleSignIn: SubmitHandler<UserSignInCredentials> = async (values) => {
     const response = await SignIn(values);
-    
+
     console.log(response);
 
     if (response.tokenError != undefined) {
@@ -32,10 +41,10 @@ const Home = () => {
       if (mesage != undefined) {
         setErrorLogin(mesage.toString());
       }
-    } 
-    if (response.token!= undefined) {       
+    }
+    if (response.token != undefined) {
       setErrorLogin(response.token.data.token);
-    } 
+    }
   };
 
   return (
@@ -80,5 +89,12 @@ const Home = () => {
     </Flex>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = withSSRGuest(async (context) => {
+
+  return{
+    props:{}
+  }
+});
 
 export default Home;
