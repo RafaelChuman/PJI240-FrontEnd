@@ -7,8 +7,11 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { queryClient } from "../services/queryClient";
 import { AuthProvider } from "../services/hooks/useAuthentication";
 
+
+
 const App = ({ Component, pageProps }: AppProps) => {
   return (
+    <>
     <AuthProvider>
       <QueryClientProvider client={queryClient}>
         <ChakraProvider theme={theme}>
@@ -19,6 +22,7 @@ const App = ({ Component, pageProps }: AppProps) => {
         <ReactQueryDevtools />
       </QueryClientProvider>
     </AuthProvider>
+    </>
   );
 };
 

@@ -7,6 +7,8 @@ import { setCookie, parseCookies, destroyCookie } from "nookies";
 import { User } from "./useUsers";
 import { GetServerSidePropsContext, NextPageContext } from "next";
 import { deserialize } from "v8";
+import { stringify } from "querystring";
+import { AuthTokenError } from "../../errors/AuthTokenError";
 
 export interface TokenError {
   message: string;
@@ -37,30 +39,30 @@ export interface UserSignInCredentials {
   password: string;
 }
 
-//let authChanel :BroadcastChannel;
+let authChanel: BroadcastChannel;
 
 export function SignOut(context?: GetServerSidePropsContext) {
   destroyCookie(context, "pji240.token");
   destroyCookie(context, "pji240.userName");
 
-  //authChanel.postMessage("signOut");
+  authChanel.postMessage("signOut");
 
-  if (process.browser) {
-    Router.push("/");
-  }
+  // if (process.browser) {
+  //   Router.push("/");
+  // }
 }
 
 export async function getToken({
   userName,
   password,
 }: UserSignInCredentials): Promise<AuthResponse> {
-  let response: AuthResponse = {
+  let responseToken: AuthResponse = {
     token: undefined,
     tokenError: undefined,
   };
 
-  response.token = undefined;
-  response.tokenError = undefined;
+  responseToken.token = undefined;
+  responseToken.tokenError = undefined;
 
   const resp = await api
     .post<Token>("/", {
@@ -68,16 +70,12 @@ export async function getToken({
       password: password,
     })
     .catch((error) => {
-      response.tokenError = error;
+      responseToken.tokenError = error;
     });
 
-  if (resp) {
-    api.defaults.headers.common["authorization"] = resp.data.token;
-  }
+  responseToken.token = resp;
 
-  response.token = resp;
-
-  return response;
+  return responseToken;
 }
 
 interface AuthProviderProps {
@@ -88,39 +86,39 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [userToken, setUserToken] = useState<Token>();
   const isAuthenticated = !!userToken;
 
-  // useEffect(() => {
-
-  //   authChanel = new BroadcastChannel("auth");
-  //   authChanel.onmessage = (message) =>{
-  //     switch (message.data){
-  //       case 'signOut':
-  //         SignOut();
-  //         break;
-  //       case 'signIn':
-  //           Router.push('/dashboard')
-  //           break;
-  //       default:
-  //         break;
-  //     }
-  //   }
-  // });
+  useEffect(() => {
+    authChanel = new BroadcastChannel("auth");
+    authChanel.onmessage = (message) => {
+      switch (message.data) {
+        case "signOut":
+          Router.push("/");
+          break;
+        case "signIn":
+          Router.push("/dashboard");
+          break;
+        default:
+          break;
+      }
+    };
+  });
 
   useEffect(() => {
     const { "pji240.token": token } = parseCookies();
     const { "pji240.userName": userName } = parseCookies();
 
     if (token) {
-      api
-        .get<User>(`users/?userName=${userName}`)
-        .then((response) => {
-          const { "pji240.token": token } = parseCookies();
-          const { "pji240.userName": userName } = parseCookies();
+      try {        
+        api.get<User>(`users/?userName=${userName}`);
+      } catch (error) {}
+      // .then((response) => {
+      //   const { "pji240.token": token } = parseCookies();
+      //   const { "pji240.userName": userName } = parseCookies();
 
-          setUserToken({ token, user: { userName } });
-        })
-        .catch(() => {
-          SignOut();
-        });
+      //   setUserToken({ token, user: { userName } });
+      // })
+      // .catch(() => {
+      //   SignOut();
+      // });
     }
   }, []);
 
@@ -147,18 +145,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
       );
 
-      //authChanel.postMessage('signIn');
+      authChanel.postMessage("signIn");
 
-
-      Router.push("/dashboard");
-
-      
+      // Router.push("/dashboard");
     }
     return response;
   }
 
   return (
-    <AuthContext.Provider value={{ SignIn,  isAuthenticated, userToken }}>
+    <AuthContext.Provider value={{ SignIn, isAuthenticated, userToken }}>
       {children}
     </AuthContext.Provider>
   );

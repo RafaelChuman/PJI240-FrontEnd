@@ -10,6 +10,7 @@ interface ProfileProps {
 
 export function Profile({ showProfileData = true }: ProfileProps) {
   function HandleSignOut(){
+    console.log("Fora")
     SignOut();
   }
 

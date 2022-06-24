@@ -10,10 +10,10 @@ export function SideBarNav() {
         <NavLink href="/dashboard" icon={RiDashboardLine} children="Dashboard" />
         <NavLink href="/users" icon={RiContactsLine} children="Usuários" />
       </NavSection>
-      <NavSection title="Automação">
+      <NavSection title="Administração">
         <Stack spacing="4" mt="8" align="stretch">
-          <NavLink href="/forms" icon={RiInputMethodLine} children="Formulários" />
-          <NavLink href="/automation" icon={RiGitMergeLine} children="Automação" />
+          <NavLink href="/categories" icon={RiInputMethodLine} children="Categorias" />
+          <NavLink href="/products" icon={RiGitMergeLine} children="Produtos" />
         </Stack>
       </NavSection>
     </Stack>

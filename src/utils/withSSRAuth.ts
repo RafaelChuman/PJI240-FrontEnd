@@ -4,14 +4,16 @@ import {
   GetServerSidePropsResult,
 } from "next";
 import { parseCookies } from "nookies";
+import { api } from "../services/api";
 
 export function withSSRAuth<P>(fn: GetServerSideProps<P>) {
   return async (
     context: GetServerSidePropsContext
   ): Promise<GetServerSidePropsResult<P>> => {
-    const cookies = parseCookies(context);
+    const { "pji240.token": token } = parseCookies(context);
+    const { "pji240.userName": userName } = parseCookies(context);
 
-    if (!cookies["pji240.token"]) {
+    if (!token) {
       return {
         redirect: {
           destination: "/",
@@ -21,14 +23,18 @@ export function withSSRAuth<P>(fn: GetServerSideProps<P>) {
     }
 
     try {
-      return await fn(context);
+      await api.get(`users/?userName=${userName}`);
+
+      
     } catch (errror) {
-      return {
-        redirect: {
-          destination: "/",
-          permanent: false,
-        },
-      };
+      // return {
+      //   props: {},
+      //   // redirect: {
+      //   //   destination: "/",
+      //   //   permanent: false,
+      //   //},
+      // };
     }
+    return await fn(context);
   };
 }

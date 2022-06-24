@@ -13,35 +13,30 @@ import { RiAddLine } from "react-icons/ri";
 import { Header } from "../../components/Header";
 import { Pagination } from "../../components/Pagination";
 import { SideBar } from "../../components/SideBar";
-import { UserTable } from "./UserTable";
-import { getUsers, User, useUsers } from "../../services/hooks/useUsers";
 import { getPaginatedData } from "../../services/api";
-import { useContext, useEffect, useState } from "react";
-import { set } from "react-hook-form";
-import { AuthContext } from "../../services/hooks/useAuthentication";
+import { useState } from "react";
 import { withSSRAuth } from "../../utils/withSSRAuth";
+import { Product, useProducts } from "../../services/hooks/useProducts";
+import { ProductTable } from "./ProductTable";
 
-function renderUserList(userPage: number, isWideVersion: boolean) {}
 
 const numberOfItensPerPage = 10;
 
-export default function UserList() {
-  const { data, isLoading, isFetching, error, refetch } = useUsers();
-  //const [users, setUsers] = useState<User[]>([]);
+export default function ProductList() {
+  const { data, isLoading, isFetching, error, refetch } = useProducts();
 
-  const [userCurrentPage, setUserCurrentPage] = useState(1);
+  const [productCurrentPage, setProductCurrentPage] = useState(1);
 
   const isWideVersion = useBreakpointValue({
     base: false,
     lg: true,
   });
 
-  const users = getPaginatedData<User>(
+  const products = getPaginatedData<Product>(
     data,
-    userCurrentPage,
+    productCurrentPage,
     numberOfItensPerPage
   );
-
 
 
   return (
@@ -52,21 +47,20 @@ export default function UserList() {
         <Box flex="1" borderRadius={8} bg="gray.800" p="8">
           <Flex mb="8" justify="space-between" align={"center"}>
             <Heading size="lg" fontWeight={"normal"}>
-              Usuários
+              Produtos
               {!isLoading && isFetching && (
                 <Spinner size={"sm"} color="gray.500" ml={4} />
               )}
             </Heading>
-            <Link href={"/users/create"} passHref>
+            <Link href={"/products/create"} passHref>
               <Button
                 as="a"
                 size="sm"
                 fontSize={"sm"}
                 colorScheme="pink"
-                // leftIcon={}
               >
                 <Icon as={RiAddLine} fontSize="28" />
-                Criar novo Usuário
+                Criar novo Produto
               </Button>
             </Link>
           </Flex>
@@ -77,18 +71,18 @@ export default function UserList() {
             </Flex>
           ) : error ? (
             <Flex justify={"center"}>
-              <Text>Falha ao Obter Dados dos Usuários</Text>
+              <Text>Falha ao Obter Dados dos Produtos</Text>
             </Flex>
           ) : (
-            users && (
+            products && (
               <>
-                <UserTable userData={users} isWideVersion={isWideVersion} />
+                <ProductTable productData={products} isWideVersion={isWideVersion} />
 
                 <Pagination
-                  totalCountOfRegisters={users.length}
-                  currentPage={userCurrentPage}
+                  totalCountOfRegisters={products.length}
+                  currentPage={productCurrentPage}
                   registersPerPage={numberOfItensPerPage}
-                  onPageClick={setUserCurrentPage}
+                  onPageClick={setProductCurrentPage}
                 ></Pagination>
               </>
             )

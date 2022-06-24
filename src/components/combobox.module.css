@@ -1,0 +1,21 @@
+
+  
+.ant-select-selection  {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+   color: #EEEEF2; 
+  min-height: 32px;
+  
+  background-color: #1F2029;
+  background: #1F2029;
+  
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid #D53F8C;
+}
+
+.ant-select-selection :hover {
+  background-color: #ED64A6;
+  background: #ED64A6;
+  
+}

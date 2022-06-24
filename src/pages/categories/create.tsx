@@ -19,53 +19,39 @@ import { useMutation } from "react-query";
 import { api } from "../../services/api";
 import { queryClient } from "../../services/queryClient";
 import { useRouter } from "next/router";
-import { User } from "../../services/hooks/useUsers";
+import { Category } from "../../services/hooks/useCategories";
 
-type UserCreatFormData = {
-  cellphone:      string,
-  cep:            string,
-  name:           string,
-  numberAddress:  string,
-  whatsApp:       string,
-};
 
-const UserCreateFormSchema = yup.object().shape({
+
+const categoryCreatFormSchema = yup.object().shape({
   name: yup.string().required("Nome Obrigatório."),
-  whatsApp: yup.string().required("whatsApp Obrigatório."),
-  cellphone: yup.string().required("Celular Obrigatório."),
-  cep: yup.string().required("CEP Obrigatório."),
-  numberAddress: yup.string().required("Número Residência Obrigatório."),
 });
 
-export default function CreateUser() {
+export default function CreateCategory() {
   const router = useRouter();
 
   const creatUser = useMutation(
-    async (user: UserCreatFormData) => {
-      const response = await api.post("users", {
-        'name' : user.name ,
-        'whatsApp':user.whatsApp,
-        'cellphone':user.cellphone,
-        'cep':user.cep,
-        'numberAddress':user.numberAddress
+    async (category: Category) => {
+      const response = await api.post("categories", {
+        name: category.name
       });
 
       return response;
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries("users");
+        queryClient.invalidateQueries("categories");
       },
     }
   );
 
-  const { register, handleSubmit, formState } = useForm<UserCreatFormData>({
-    resolver: yupResolver(UserCreateFormSchema),
+  const { register, handleSubmit, formState } = useForm<Category>({
+    resolver: yupResolver(categoryCreatFormSchema),
   });
 
-  const handleCreateUser: SubmitHandler<UserCreatFormData> = async (values) => {
+  const handleCreateCategory: SubmitHandler<Category> = async (values) => {
     await creatUser.mutateAsync(values);
-    router.push("/users");
+    router.push("/categories");
   };
 
   return (
@@ -75,7 +61,7 @@ export default function CreateUser() {
         <SideBar />
         <Box
           as="form"
-          onSubmit={handleSubmit(handleCreateUser)}
+          onSubmit={handleSubmit(handleCreateCategory)}
           flex="1"
           borderRadius={8}
           bg="gray.800"
@@ -83,46 +69,23 @@ export default function CreateUser() {
         >
           <Heading size="lg" fontWeight={"normal"}>
             {" "}
-            Criar Usuário
+            Criar Categoria
           </Heading>
           <Divider my="6" borderColor={"gray.700"} />
           <VStack spacing={"8"}>
             <SimpleGrid minChildWidth={"240px"} spacing={["6", "8"]} w="100%">
               <Input
-                label="Nome Completo"
+                label="Nome Categoria"
                 error={formState.errors.name}
                 {...register("name")}
               ></Input>
-              
-            </SimpleGrid>
-            <SimpleGrid minChildWidth={"240px"} spacing={["6", "8"]} w="100%">
-            <Input
-                label="Whatsapp"
-                error={formState.errors.whatsApp}
-                {...register("whatsApp")}
-              ></Input>
-              <Input
-                label="Celular"
-                error={formState.errors.cellphone}
-                {...register("cellphone")}
-              ></Input>
             </SimpleGrid>
             <SimpleGrid minChildWidth={"240px"} spacing={["6", "8"]} w="100%">              
-              <Input
-                label="CEP"
-                error={formState.errors.cep}
-                {...register("cep")}                
-              ></Input>
-              <Input
-                label="Número Residência"
-                error={formState.errors.numberAddress}
-                {...register("numberAddress")}                
-              ></Input>
             </SimpleGrid>
           </VStack>
           <Flex mt="8" justify={"flex-end"}>
             <HStack spacing={"4"}>
-              <Link href={"/users"} passHref>
+              <Link href={"/categories"} passHref>
                 <Button colorScheme={"whiteAlpha"}>Cancelar</Button>
               </Link>
               <Button

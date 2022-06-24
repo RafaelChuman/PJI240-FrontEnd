@@ -3,7 +3,7 @@ import { Input } from "../components/Input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import {
   AuthContext,
   AuthProvider,
@@ -34,8 +34,6 @@ const Home = () => {
   const handleSignIn: SubmitHandler<UserSignInCredentials> = async (values) => {
     const response = await SignIn(values);
 
-    console.log(response);
-
     if (response.tokenError != undefined) {
       const mesage = response.tokenError.response?.data.message;
       if (mesage != undefined) {
@@ -43,8 +41,11 @@ const Home = () => {
       }
     }
     if (response.token != undefined) {
-      setErrorLogin(response.token.data.token);
+      //setErrorLogin(response.token.data.token);
+      console.log('Redirectiong to /DashBoard');
+      Router.push('/dashboard');
     }
+    
   };
 
   return (

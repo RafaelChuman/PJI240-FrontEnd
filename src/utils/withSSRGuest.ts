@@ -9,9 +9,11 @@ export function withSSRGuest<P>(fn: GetServerSideProps<P>) {
   return async (
     context: GetServerSidePropsContext
   ): Promise<GetServerSidePropsResult<P>> => {
+    
     const cookies = parseCookies(context);
-
+    
     if (cookies["pji240.token"]) {
+      
       return {
         redirect: {
           destination: "/dashboard",

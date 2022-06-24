@@ -40,6 +40,6 @@ export async function getUsers(): Promise<User[]> {
 
 export function useUsers() {
   return useQuery("users", getUsers, {
-    staleTime: 1000 * 5, //5 Seconds
+    staleTime: 1000 * 30, //30 Seconds
   });
 }
