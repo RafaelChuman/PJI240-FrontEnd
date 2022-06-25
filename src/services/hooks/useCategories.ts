@@ -1,5 +1,4 @@
 import { useQuery } from "react-query";
-import { Options } from "../../components/ComboBox";
 import { api } from "../api";
 
 export interface Category {
@@ -31,22 +30,4 @@ export function useCategories() {
   });
 }
 
-export function FormatCategoryDataToCombobox(
-  categories: Category[]
-): Options[] {
-  if (categories) {
-    const formatedData = categories.map((category: Category) => {
-      return {          
-          id: category.id,
-          value: category.name        
-      };
-    });
 
-    
-    return formatedData;
-  }
-  return [{          
-    id: '',
-    value: ''        
-  }];
-}

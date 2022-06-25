@@ -16,7 +16,7 @@ export function ProductTableLine({product,isWideVersion = true,}: TableLineProps
   return (
     <Tr>
       <Td px={["4", "4", "6"]}>
-        <Text fontWeight="bold">{product.categoriesId}</Text>
+        <Text fontWeight="bold">{product.category?.name}</Text>
       </Td>
       <Td>
         <Box>

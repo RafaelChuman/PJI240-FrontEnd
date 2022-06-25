@@ -1,12 +1,13 @@
 import { useQuery } from "react-query";
 import { api } from "../api";
+import { Category } from "./useCategories";
 
 export const ProductUnitOptions = [
-  { value: "ml", label: "ml" },
-  { value: "l", label: "l" },
-  { value: "g", label: "g" },
-  { value: "Kg", label: "Kg" },
-  { value: "und", label: "und" },
+  { id: "ml", value: "ml" },
+  { id: "l", value: "l" },
+  { id: "g", value: "g" },
+  { id: "Kg", value: "Kg" },
+  { id: "und", value: "und" },
 ];
 
 export const ProductUnitGroupedOptions = [
@@ -25,6 +26,7 @@ export interface Product {
     quantityValue:  number,
     quantityUnit:   "ml" | "l" | "g" | "Kg" | "und",
     value:          string,
+    category?: Category,
   }
 
 export async function getProducts(): Promise<Product[]> {
@@ -40,6 +42,7 @@ export async function getProducts(): Promise<Product[]> {
       quantityValue:  product.quantityValue,
       quantityUnit:   product.quantityUnit,
       value:          product.value,
+      category:       product.category,
     };
   });
   return formatedData;
