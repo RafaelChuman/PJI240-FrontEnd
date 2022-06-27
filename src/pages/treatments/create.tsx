@@ -32,10 +32,10 @@ import { getUsers } from "../../services/hooks/useUsers";
 import { Treatment } from "../../services/hooks/useTreatments";
 import { CreateTreatmentTable } from "./CreateTreatmentTable";
 import { getProducts } from "../../services/hooks/useProducts";
+import { v4 as uuidv4 } from 'uuid';
 
 const TreatmentCreatFormSchema = yup.object().shape({
-  treatmentsId: yup.string().required("Nome Obrigatório."),
-  uersId: yup.string(),
+  usersId: yup.string(),
 });
 
 export interface addProductItem {
@@ -46,6 +46,7 @@ export interface addProductItem {
 
 export default function CreateTreatment() {
   const router = useRouter();
+  const [treatmenstId, setTreatmentsId] = useState("");
   const [usersValue, setUsersValue] = useState<Options[]>();
   const [usersComboBoxValue, setUsersComboBoxValue] = useState("");
   const [productsValue, setProductsValue] = useState<Options[]>();
@@ -57,6 +58,9 @@ export default function CreateTreatment() {
   >([]);
 
   useEffect(() => {
+
+    setTreatmentsId(uuidv4());
+
     getUsers().then((resp) => {
       const users = FormatDataToCombobox(resp);
 
@@ -77,14 +81,11 @@ export default function CreateTreatment() {
 
   const creatTreatment = useMutation(
     async (treatment: Treatment) => {
-      const response = listOfProductsToAdd.map(async (product) => {
+      const response = 
         await api.post("treatments", {
-          treatmentsId: treatment.treatmentsId,
-          uersId: treatment.uersId,
-          productsId: product.productsId,
-          quantityOfProduct: product.quantityOfProduct,
-          quantityOfProductPerDay: product.quantityOfProductPerDay,
-        });
+          treatmentsId: treatmenstId,
+          usersId: treatment.usersId,
+          products: listOfProductsToAdd 
       });
       return response;
     },
@@ -101,7 +102,7 @@ export default function CreateTreatment() {
 
   const handleaddProductTratment = async(e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log("Chuminha")
+    
     const p: addProductItem = {
       productsId: productsComboBoxValue,
       quantityOfProduct: quantityOfProduct,
@@ -114,10 +115,10 @@ export default function CreateTreatment() {
 
   const handleCreateTreatment: SubmitHandler<Treatment> = async (values) => {
     if (!values.productsId) values.productsId = productsComboBoxValue;
-    if (!values.uersId) values.uersId = usersComboBoxValue;
+    if (!values.usersId) values.usersId = usersComboBoxValue;
 
     await creatTreatment.mutateAsync(values);
-    router.push("/treatments");
+    //router.push("/treatments");
   };
 
   return (
@@ -153,14 +154,15 @@ export default function CreateTreatment() {
                 }}
                 comboboxData={usersValue}
                 placeHolder="Selecione o Cliente"
-                error={formState.errors.uersId}
-                {...register("uersId")}
+                error={formState.errors.usersId}
+                {...register("usersId")}
               ></ComboBox>
               <Input
-                label="Id Tratamento"
                 error={formState.errors.treatmentsId}
                 visibility="hidden"
+                value={treatmenstId}
                 {...register("treatmentsId")}
+
               ></Input>
             </SimpleGrid>
           </VStack>
@@ -231,7 +233,7 @@ export default function CreateTreatment() {
                 isLoading={formState.isSubmitting}
                 onClick={(e)=>handleaddProductTratment(e)} 
               >
-                Salvar
+                Adicionar
               </Button>
             </SimpleGrid>
           </VStack>
@@ -239,7 +241,8 @@ export default function CreateTreatment() {
         <Box flex={"2"} borderRadius={8} bg="gray.800" p={["6", "8"]}>
         <Flex>
           <CreateTreatmentTable
-            products={listOfProductsToAdd}
+            products={productsValue}
+            productsToAdd={listOfProductsToAdd}
             isWideVersion={isWideVersion}
           />
         </Flex>

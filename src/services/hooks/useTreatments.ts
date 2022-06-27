@@ -6,12 +6,12 @@ import { User } from "./useUsers";
 export interface Treatment {
   id: string;
   treatmentsId: string;
-  uersId: string;
+  usersId: string;
   productsId: string;
   quantityOfProduct: number;
   quantityOfProductPerDay: number;
   products?: Product;
-  user?: User;
+  users?: User;
   createdAt?: Date;
   isValid?: boolean;
 }
@@ -21,7 +21,7 @@ export interface TreatmentGroupedByTreatmentId {
   treatmentsId: string;
   isValid?: boolean;
 
-  user: User | undefined;
+  users: User | undefined;
 
   products: {
     product: Product | undefined;
@@ -57,7 +57,7 @@ export function groupByTreatmentId(
         treatmentsId: itemTreatment.treatmentsId,
         isValid:      itemTreatment.isValid,
 
-        user:         itemTreatment.user,
+        users:         itemTreatment.users,
 
         products: [
           {
@@ -81,17 +81,16 @@ export async function getTreatments(): Promise<Treatment[]> {
     return {
       id: treatment.id,
       treatmentsId: treatment.treatmentsId,
-      uersId: treatment.uersId,
+      uersId: treatment.usersId,
       productsId: treatment.productsId,
       quantityOfProduct: treatment.quantityOfProduct,
       quantityOfProductPerDay: treatment.quantityOfProductPerDay,
       products: treatment.products,
-      user: treatment.user,
+      users: treatment.users,
       createdAt: treatment.createdAt,
       isValid: treatment.isValid,
     };
   });
-  console.log(formatedData);
   return formatedData;
 }
 

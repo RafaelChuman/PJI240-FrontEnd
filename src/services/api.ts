@@ -17,7 +17,7 @@ export function setupAPIClient(context?: GetServerSidePropsContext) {
   let cookies = parseCookies(context);
 
   const api: AxiosInstance = axios.create({
-    baseURL: "http://localhost:3333/",
+    baseURL: "http://pji240.herokuapp.com/",
     headers: {
       authorization: cookies["pji240.token"],
     },

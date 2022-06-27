@@ -1,14 +1,16 @@
 import { Table, Thead, Tr, Th, Tbody } from "@chakra-ui/react";
+import { Options } from "../../components/ComboBox";
 import { addProductItem } from "./create";
 import { CreateTreatmentTableLine } from "./CreatTreatmentTableLine";
 
 
 interface CreateTreatmentTableProps {
-  products: addProductItem[] | undefined;
+  products: Options[] | undefined;
+  productsToAdd: addProductItem[] | undefined;
   isWideVersion: boolean | undefined;
 }
 
-export function CreateTreatmentTable({ products, isWideVersion }: CreateTreatmentTableProps) {
+export function CreateTreatmentTable({ products, productsToAdd, isWideVersion }: CreateTreatmentTableProps) {
   return (
     <Table colorScheme={"whiteAlpha"}>
       <Thead>
@@ -20,18 +22,19 @@ export function CreateTreatmentTable({ products, isWideVersion }: CreateTreatmen
         </Tr>
       </Thead>
       <Tbody>
-        {products ? (
-          products.map((product) => {
+        {productsToAdd ? (
+          productsToAdd.map((product) => {
             return (
               <CreateTreatmentTableLine
                 key={product.productsId}
+                productName={products?.find((item) => item.id === product.productsId)?.value}
                 product={product}
                 isWideVersion={isWideVersion}
               />
             );
           })
         ) : (
-          <CreateTreatmentTableLine product={undefined}  isWideVersion={false} />
+          <CreateTreatmentTableLine productName={undefined} product={undefined}  isWideVersion={false} />
         )}
       </Tbody>
     </Table>

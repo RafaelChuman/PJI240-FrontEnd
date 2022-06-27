@@ -16,8 +16,8 @@ export function TreatmentTable({ treatmentData, isWideVersion }: TreatmentTableP
           <Th px={["4", "4", "6"]} color={"gray.300"} width="8">
             <Checkbox colorScheme={"pink"}></Checkbox>
           </Th>
-          <Th>Tratamentos</Th>
           <Th>Cliente</Th>
+          <Th>Tratamentos</Th>
           <Th>Produtos</Th>
           <Th>Valor</Th>          
           <Th width={"8"}> </Th>

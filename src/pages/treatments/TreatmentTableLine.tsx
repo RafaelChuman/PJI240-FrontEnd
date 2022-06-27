@@ -18,15 +18,38 @@ export function TreatmentTableLine({
   return (
     <Tr>
       <Td px={["4", "4", "6"]}>
-      <Text fontWeight="bold">{treatment.treatmentsId}</Text>
+        <Text fontWeight="bold">{treatment.treatmentsId}</Text>
+      </Td>
+      <Td>
+        <Box>
+          <Text fontWeight="bold">{treatment.users?.name}</Text>
+          <Text fontWeight="bold">{treatment.users?.whatsApp}</Text>
+        </Box>
       </Td>
       <Td>
         <Box>
           {treatment.products.map((data) => {
             return (
               <>
-                <Text fontWeight="bold">{data.quantityOfProductPerDay} Por Dia</Text>
-                <Text fontWeight="bold">{data.quantityOfProduct}</Text>
+                <Text fontWeight="bold">
+                  {data.quantityOfProductPerDay} {data.product?.quantityUnit}{" "}
+                  Por Dia
+                </Text>
+              </>
+            );
+          })}
+        </Box>
+      </Td>
+
+      <Td>
+        <Box>
+          {treatment.products.map((data) => {
+            return (
+              <>
+                <Text fontWeight="bold">{data.product?.name}</Text>
+                <Text fontWeight="bold">
+                  {data.product?.quantityValue} {data.product?.quantityUnit}
+                </Text>
               </>
             );
           })}
@@ -34,28 +57,18 @@ export function TreatmentTableLine({
       </Td>
       <Td>
         <Box>
-          <Text fontWeight="bold">{treatment.user?.name}</Text>
-          <Text fontWeight="bold">{treatment.user?.whatsApp}</Text>
-        </Box>
-      </Td>
-      <Td>
-      <Box>
-      {treatment.products.map((data) => {
+          {treatment.products.map((data) => {
             return (
               <>
-                <Text fontWeight="bold">{data.product?.name} Por Dia</Text>
-                <Text fontWeight="bold">{data.product?.quantityValue} {data.product?.quantityUnit}</Text>
-              </>
-            );
-          })}
-            </Box>
-      </Td>
-      <Td>
-        <Box>
-        {treatment.products.map((data) => {
-            return (
-              <>
-                <Text fontWeight="bold">{data.product?.value} Por Dia</Text>
+                {
+                  <Text fontWeight="bold">
+                    {
+                    Intl.NumberFormat("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                    }).format(parseInt(data.product?.value || "0"))}
+                  </Text>
+                }
               </>
             );
           })}

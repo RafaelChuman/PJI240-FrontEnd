@@ -4,11 +4,13 @@ import { TreatmentGroupedByTreatmentId } from "../../services/hooks/useTreatment
 import { addProductItem } from "./create";
 
 interface CreateTableLineProps {
+  productName: string | undefined;
   product: addProductItem | undefined;
   isWideVersion: boolean | undefined;
 }
 
 export function CreateTreatmentTableLine({
+  productName,
   product,
   isWideVersion = true,
 }: CreateTableLineProps) {
@@ -19,7 +21,7 @@ export function CreateTreatmentTableLine({
   return (
     <Tr>
       <Td>
-        <Text fontWeight="bold">{product.productsId}</Text>
+        <Text fontWeight="bold">{productName}</Text>
       </Td>
       <Td>
         <Text fontWeight="bold">{product.quantityOfProduct} Por Dia</Text>
