@@ -14,8 +14,8 @@ import { RiAddLine } from "react-icons/ri";
 import { Header } from "../../components/Header";
 import { Pagination } from "../../components/Pagination";
 import { SideBar } from "../../components/SideBar";
-import { getPaginatedData } from "../../services/api";
 import { Category, useCategories } from "../../services/hooks/useCategories";
+import { returnPaginatedData } from "../../services/utils";
 import { withSSRAuth } from "../../utils/withSSRAuth";
 import { CategoryTable } from "./CategoryTable";
 
@@ -31,7 +31,7 @@ export default function UserList() {
     lg: true,
   });
 
-  const categories = getPaginatedData<Category>(
+  const categories = returnPaginatedData<Category>(
     data,
     userCurrentPage,
     numberOfItensPerPage

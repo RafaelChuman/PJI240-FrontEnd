@@ -13,11 +13,11 @@ import { RiAddLine } from "react-icons/ri";
 import { Header } from "../../components/Header";
 import { Pagination } from "../../components/Pagination";
 import { SideBar } from "../../components/SideBar";
-import { getPaginatedData } from "../../services/api";
 import { useState } from "react";
 import { withSSRAuth } from "../../utils/withSSRAuth";
 import { Product, useProducts } from "../../services/hooks/useProducts";
 import { ProductTable } from "./ProductTable";
+import { returnPaginatedData } from "../../services/utils";
 
 
 const numberOfItensPerPage = 10;
@@ -32,7 +32,7 @@ export default function ProductList() {
     lg: true,
   });
 
-  const products = getPaginatedData<Product>(
+  const products = returnPaginatedData<Product>(
     data,
     productCurrentPage,
     numberOfItensPerPage
