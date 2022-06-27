@@ -1,4 +1,4 @@
-import { Table, Thead, Tr, Th, Td, Checkbox, Tbody } from "@chakra-ui/react";
+import { Table, Thead, Tr, Th, Checkbox, Tbody } from "@chakra-ui/react";
 import { TreatmentGroupedByTreatmentId } from "../../services/hooks/useTreatments";
 import { TreatmentTableLine } from "./TreatmentTableLine";
 

@@ -26,11 +26,9 @@ export function CategoryTableLine({category , isWideVersion = true}: TableLinePr
       {isWideVersion && <Td>{category.created_at}</Td>}
       <Td>
         <Button
-          // as="a"
           size="sm"
           fontSize={"sm"}
           colorScheme="purple"
-          // leftIcon={}
           p={!isWideVersion ? "0" : "3"}
           margin= "0"
         >          

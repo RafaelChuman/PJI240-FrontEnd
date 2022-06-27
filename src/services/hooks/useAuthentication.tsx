@@ -1,14 +1,11 @@
 import { AxiosError, AxiosResponse } from "axios";
+import { GetServerSidePropsContext } from "next";
+import { useRouter } from "next/router";
+import { destroyCookie, parseCookies, setCookie } from "nookies";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { api } from "../api";
-import Router from "next/router";
-import { setCookie, parseCookies, destroyCookie } from "nookies";
 import { User } from "./useUsers";
-import { GetServerSidePropsContext, NextPageContext } from "next";
-import { deserialize } from "v8";
-import { stringify } from "querystring";
-import { AuthTokenError } from "../../errors/AuthTokenError";
 
 export interface TokenError {
   message: string;
@@ -47,9 +44,6 @@ export function SignOut(context?: GetServerSidePropsContext) {
 
   authChanel.postMessage("signOut");
 
-  // if (process.browser) {
-  //   Router.push("/");
-  // }
 }
 
 export async function getToken({
@@ -83,6 +77,7 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
+  const router = useRouter()
   const [userToken, setUserToken] = useState<Token>();
   const isAuthenticated = !!userToken;
 
@@ -91,10 +86,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     authChanel.onmessage = (message) => {
       switch (message.data) {
         case "signOut":
-          Router.push("/");
+          router.push("/");
           break;
         case "signIn":
-          Router.push("/dashboard");
+          router.push("/dashboard");
           break;
         default:
           break;
@@ -146,8 +141,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       );
 
       authChanel.postMessage("signIn");
-
-      // Router.push("/dashboard");
     }
     return response;
   }

@@ -1,8 +1,4 @@
-import {
-  GetServerSideProps,
-  GetServerSidePropsContext,
-  GetServerSidePropsResult,
-} from "next";
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import { parseCookies } from "nookies";
 import { api } from "../services/api";
 
@@ -27,13 +23,7 @@ export function withSSRAuth<P>(fn: GetServerSideProps<P>) {
 
       
     } catch (errror) {
-      // return {
-      //   props: {},
-      //   // redirect: {
-      //   //   destination: "/",
-      //   //   permanent: false,
-      //   //},
-      // };
+      
     }
     return await fn(context);
   };

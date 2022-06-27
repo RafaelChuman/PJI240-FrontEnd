@@ -41,10 +41,6 @@ export default function TreatmentList() {
     numberOfItensPerPage
   );
 
-
-  //const treatmentsLength =
-
-
   return (
     <Box>
       <Header></Header>
@@ -99,7 +95,7 @@ export default function TreatmentList() {
   );
 }
 
-export const getServerSideProps = withSSRAuth(async (context) => {
+export const getServerSideProps = withSSRAuth(async () => {
   return {
     props: {},
   };

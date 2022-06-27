@@ -3,8 +3,6 @@ import { Product } from "../../services/hooks/useProducts";
 import { ProductTableLine } from "./ProductTableLine";
 
 
-
-
 interface ProductTableProps {
   productData: Product[] | undefined;
   isWideVersion: boolean | undefined;

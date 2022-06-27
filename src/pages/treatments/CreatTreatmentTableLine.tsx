@@ -1,6 +1,5 @@
-import { Td, Tr, Checkbox, Text, Box, Button, Icon } from "@chakra-ui/react";
+import { Td, Tr, Text, Button, Icon } from "@chakra-ui/react";
 import { RiPencilLine } from "react-icons/ri";
-import { TreatmentGroupedByTreatmentId } from "../../services/hooks/useTreatments";
 import { addProductItem } from "./create";
 
 interface CreateTableLineProps {

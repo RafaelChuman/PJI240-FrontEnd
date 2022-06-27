@@ -1,4 +1,4 @@
-import { Td, Tr, Checkbox, Text, Box, Button, Icon } from "@chakra-ui/react";
+import { Td, Tr, Text, Box, Button, Icon } from "@chakra-ui/react";
 import { RiPencilLine } from "react-icons/ri";
 import { Product } from "../../services/hooks/useProducts";
 

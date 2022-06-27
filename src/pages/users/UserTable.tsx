@@ -2,8 +2,6 @@ import { Table, Thead, Tr, Th, Td, Checkbox, Tbody } from "@chakra-ui/react";
 import { User } from "../../services/hooks/useUsers";
 import { TableLine } from "./UserTableLine";
 
-
-
 interface UserTableProps {
   userData: User[] | undefined;
   isWideVersion: boolean | undefined;

@@ -23,7 +23,7 @@ import { returnPaginatedData } from "../../services/utils";
 const numberOfItensPerPage = 10;
 
 export default function ProductList() {
-  const { data, isLoading, isFetching, error, refetch } = useProducts();
+  const { data, isLoading, isFetching, error } = useProducts();
 
   const [productCurrentPage, setProductCurrentPage] = useState(1);
 
@@ -93,7 +93,7 @@ export default function ProductList() {
   );
 }
 
-export const getServerSideProps = withSSRAuth(async (context) => {
+export const getServerSideProps = withSSRAuth(async () => {
   return {
     props: {},
   };

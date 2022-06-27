@@ -3,18 +3,10 @@ import { Input } from "../components/Input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Router, { useRouter } from "next/router";
-import {
-  AuthContext,
-  AuthProvider,
-  useAuthenticateMutation,
-  UserAuthCredentials,
-  UserSignInCredentials,
-} from "../services/hooks/useAuthentication";
+import {AuthContext,  UserSignInCredentials} from "../services/hooks/useAuthentication";
 import { useContext, useState } from "react";
-import { GetServerSideProps } from "next";
-import { parseCookies } from "nookies";
 import { withSSRGuest } from "../utils/withSSRGuest";
+import { useRouter } from "next/router";
 
 const sigInFormSchema = yup.object().shape({
   userName: yup.string().required("Usuário Obrigatório."),
@@ -43,7 +35,7 @@ const Home = () => {
     if (response.token != undefined) {
       //setErrorLogin(response.token.data.token);
       console.log('Redirectiong to /DashBoard');
-      Router.push('/dashboard');
+      router.push('/dashboard');
     }
     
   };
@@ -91,7 +83,7 @@ const Home = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = withSSRGuest(async (context) => {
+export const getServerSideProps = withSSRGuest(async () => {
 
   return{
     props:{}

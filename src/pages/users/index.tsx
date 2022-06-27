@@ -14,14 +14,10 @@ import { Header } from "../../components/Header";
 import { Pagination } from "../../components/Pagination";
 import { SideBar } from "../../components/SideBar";
 import { UserTable } from "./UserTable";
-import { getUsers, User, useUsers } from "../../services/hooks/useUsers";
-import { getPaginatedData } from "../../services/api";
-import { useContext, useEffect, useState } from "react";
-import { set } from "react-hook-form";
-import { AuthContext } from "../../services/hooks/useAuthentication";
+import { User, useUsers } from "../../services/hooks/useUsers";
+import { useState } from "react";
 import { withSSRAuth } from "../../utils/withSSRAuth";
-
-function renderUserList(userPage: number, isWideVersion: boolean) {}
+import { returnPaginatedData } from "../../services/utils";
 
 const numberOfItensPerPage = 10;
 
@@ -36,7 +32,7 @@ export default function UserList() {
     lg: true,
   });
 
-  const users = getPaginatedData<User>(
+  const users = returnPaginatedData<User>(
     data,
     userCurrentPage,
     numberOfItensPerPage
@@ -99,7 +95,7 @@ export default function UserList() {
   );
 }
 
-export const getServerSideProps = withSSRAuth(async (context) => {
+export const getServerSideProps = withSSRAuth(async () => {
   return {
     props: {},
   };

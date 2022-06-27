@@ -91,7 +91,7 @@ export default function UserList() {
   );
 }
 
-export const getServerSideProps = withSSRAuth(async (context) => {
+export const getServerSideProps = withSSRAuth(async () => {
   return {
     props: {},
   };

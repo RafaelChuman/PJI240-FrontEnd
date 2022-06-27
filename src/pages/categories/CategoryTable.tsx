@@ -1,10 +1,6 @@
 import { Table, Thead, Tr, Th, Td, Checkbox, Tbody } from "@chakra-ui/react";
 import { Category } from "../../services/hooks/useCategories";
-import { User } from "../../services/hooks/useUsers";
-import { TableLine } from "../users/UserTableLine";
 import { CategoryTableLine } from "./CategoryTableLine";
-
-
 
 interface UserTableProps {
   categoryData: Category[] | undefined;

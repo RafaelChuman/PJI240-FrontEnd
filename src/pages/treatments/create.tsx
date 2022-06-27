@@ -6,11 +6,8 @@ import {
   Heading,
   HStack,
   SimpleGrid,
-  Select,
   VStack,
   useBreakpointValue,
-  Checkbox,
-  Image,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { Header } from "../../components/Header";
@@ -22,17 +19,15 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { api } from "../../services/api";
 import { queryClient } from "../../services/queryClient";
-import { useRouter } from "next/router";
-
 import { ComboBox, Options } from "../../components/ComboBox";
 import { useEffect, useState } from "react";
 import { FormatDataToCombobox } from "../../services/utils";
-import { getCategories } from "../../services/hooks/useCategories";
 import { getUsers } from "../../services/hooks/useUsers";
 import { Treatment } from "../../services/hooks/useTreatments";
 import { CreateTreatmentTable } from "./CreateTreatmentTable";
 import { getProducts } from "../../services/hooks/useProducts";
 import { v4 as uuidv4 } from 'uuid';
+import { useRouter } from "next/router";
 
 const TreatmentCreatFormSchema = yup.object().shape({
   usersId: yup.string(),
@@ -182,7 +177,7 @@ export default function CreateTreatment() {
           </Flex>
         </Box>
         <Box as="form"
-          //onSubmit={(e)=>handleaddProductTratment(e)} 
+        
           flex={"2"} 
           borderRadius={8} 
           bg="gray.800" 

@@ -19,18 +19,12 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { api } from "../../services/api";
 import { queryClient } from "../../services/queryClient";
-import { useRouter } from "next/router";
-import {
-  Product,
-  ProductUnitGroupedOptions,
-  ProductUnitOptions,
-} from "../../services/hooks/useProducts";
-import {
-  getCategories,
-} from "../../services/hooks/useCategories";
+import { Product, ProductUnitOptions} from "../../services/hooks/useProducts";
+import {  getCategories,} from "../../services/hooks/useCategories";
 import { ComboBox, Options } from "../../components/ComboBox";
 import { useEffect, useState } from "react";
 import { FormatDataToCombobox } from "../../services/utils";
+import { useRouter } from "next/router";
 
 const ProductCreatFormSchema = yup.object().shape({
   name: yup.string().required("Nome Obrigatório."),
@@ -204,7 +198,7 @@ export default function CreateProduct() {
               <Button
                 type="submit"
                 colorScheme={"pink"}
-                //onClick={handleSubmit(handleCreateProduct)}
+                
                 isLoading={formState.isSubmitting}
               >
                 Salvar
