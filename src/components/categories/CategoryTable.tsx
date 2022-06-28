@@ -24,7 +24,7 @@ export function CategoryTable({ categoryData, isWideVersion }: UserTableProps) {
         {categoryData ? (
           categoryData.map((ctg) => {
             return (
-              <CategoryTableLine
+              <CategoryTableLine key={ctg.id}
                 category={ctg}
                 isWideVersion={isWideVersion}
               />

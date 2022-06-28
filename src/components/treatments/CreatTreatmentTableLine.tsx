@@ -1,6 +1,6 @@
 import { Td, Tr, Text, Button, Icon } from "@chakra-ui/react";
 import { RiPencilLine } from "react-icons/ri";
-import { addProductItem } from "./create";
+import { addProductItem } from "../../pages/treatments/create";
 
 interface CreateTableLineProps {
   productName: string | undefined;

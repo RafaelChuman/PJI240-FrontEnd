@@ -1,6 +1,6 @@
 import { Table, Thead, Tr, Th, Tbody } from "@chakra-ui/react";
 import { Options } from "../../components/ComboBox";
-import { addProductItem } from "./create";
+import { addProductItem } from "../../pages/treatments/create";
 import { CreateTreatmentTableLine } from "./CreatTreatmentTableLine";
 
 

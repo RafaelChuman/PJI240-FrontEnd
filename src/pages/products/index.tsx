@@ -16,7 +16,7 @@ import { SideBar } from "../../components/SideBar";
 import { useState } from "react";
 import { withSSRAuth } from "../../utils/withSSRAuth";
 import { Product, useProducts } from "../../services/hooks/useProducts";
-import { ProductTable } from "./ProductTable";
+import { ProductTable } from "../../components/products/ProductTable";
 import { returnPaginatedData } from "../../services/utils";
 
 

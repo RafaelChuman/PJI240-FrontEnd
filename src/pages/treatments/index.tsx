@@ -16,8 +16,8 @@ import { SideBar } from "../../components/SideBar";
 import { useState } from "react";
 import { withSSRAuth } from "../../utils/withSSRAuth";
 import { groupByTreatmentId, TreatmentGroupedByTreatmentId, useTreatments } from "../../services/hooks/useTreatments";
-import { TreatmentTable } from "./TreatmentTable";
 import { returnPaginatedData } from "../../services/utils";
+import { TreatmentTable } from "../../components/treatments/TreatmentTable";
 
 
 const numberOfItensPerPage = 10;

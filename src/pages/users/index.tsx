@@ -13,11 +13,11 @@ import { RiAddLine } from "react-icons/ri";
 import { Header } from "../../components/Header";
 import { Pagination } from "../../components/Pagination";
 import { SideBar } from "../../components/SideBar";
-import { UserTable } from "./UserTable";
 import { User, useUsers } from "../../services/hooks/useUsers";
 import { useState } from "react";
 import { withSSRAuth } from "../../utils/withSSRAuth";
 import { returnPaginatedData } from "../../services/utils";
+import { UserTable } from "../../components/users/UserTable";
 
 const numberOfItensPerPage = 10;
 

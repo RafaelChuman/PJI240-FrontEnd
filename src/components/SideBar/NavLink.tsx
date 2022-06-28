@@ -9,17 +9,17 @@ import { ActiveLink } from "../ActiveLink";
 
 interface NavLinkProps extends ChakraLinkProps {
   icon: ElementType;
-  children: string;
+  navComponent: string;
   href: string;
 }
 
-export function NavLink({ icon, children, href,...rest }: NavLinkProps) {
+export function NavLink({ icon, navComponent, href,...rest }: NavLinkProps) {
   return (
     <ActiveLink href={href} passHref>
       <ChakraLink display="flex" alignItems="center" {...rest}>
         <Icon as={icon} fontSize="20"></Icon>
         <Text ml="4" fontWeight="medium">
-          {children}
+          {navComponent}
         </Text>
       </ChakraLink>
     </ActiveLink>

@@ -24,10 +24,10 @@ import { useEffect, useState } from "react";
 import { FormatDataToCombobox } from "../../services/utils";
 import { getUsers } from "../../services/hooks/useUsers";
 import { Treatment } from "../../services/hooks/useTreatments";
-import { CreateTreatmentTable } from "./CreateTreatmentTable";
 import { getProducts } from "../../services/hooks/useProducts";
 import { v4 as uuidv4 } from 'uuid';
 import { useRouter } from "next/router";
+import { CreateTreatmentTable } from "../../components/treatments/CreateTreatmentTable";
 
 const TreatmentCreatFormSchema = yup.object().shape({
   usersId: yup.string(),

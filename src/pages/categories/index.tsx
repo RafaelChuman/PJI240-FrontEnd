@@ -11,13 +11,13 @@ import {
 import Link from "next/link";
 import { useState } from "react";
 import { RiAddLine } from "react-icons/ri";
+import { CategoryTable } from "../../components/categories/CategoryTable";
 import { Header } from "../../components/Header";
 import { Pagination } from "../../components/Pagination";
 import { SideBar } from "../../components/SideBar";
 import { Category, useCategories } from "../../services/hooks/useCategories";
 import { returnPaginatedData } from "../../services/utils";
 import { withSSRAuth } from "../../utils/withSSRAuth";
-import { CategoryTable } from "./CategoryTable";
 
 const numberOfItensPerPage = 10;
 
