@@ -72,12 +72,12 @@ export default function UserList() {
               <Text>Falha ao Obter Dados dos Usuários</Text>
             </Flex>
           ) : (
-            categories && (
+            categories && data &&(
               <>
                 <CategoryTable categoryData={categories} isWideVersion={isWideVersion} />
 
                 <Pagination
-                  totalCountOfRegisters={categories.length}
+                  totalCountOfRegisters={data.length}
                   currentPage={userCurrentPage}
                   registersPerPage={numberOfItensPerPage}
                   onPageClick={setUserCurrentPage}

@@ -15,10 +15,13 @@ import { Pagination } from "../../components/Pagination";
 import { SideBar } from "../../components/SideBar";
 import { useState } from "react";
 import { withSSRAuth } from "../../utils/withSSRAuth";
-import { groupByTreatmentId, TreatmentGroupedByTreatmentId, useTreatments } from "../../services/hooks/useTreatments";
+import {
+  groupByTreatmentId,
+  TreatmentGroupedByTreatmentId,
+  useTreatments,
+} from "../../services/hooks/useTreatments";
 import { returnPaginatedData } from "../../services/utils";
 import { TreatmentTable } from "../../components/treatments/TreatmentTable";
-
 
 const numberOfItensPerPage = 10;
 
@@ -32,14 +35,17 @@ export default function TreatmentList() {
     lg: true,
   });
 
+  
+  const dataFormated = groupByTreatmentId(data);
 
-  const dataFormated =  groupByTreatmentId(data);
+  
 
   const treatments = returnPaginatedData<TreatmentGroupedByTreatmentId>(
     dataFormated,
     treatmentCurrentPage,
     numberOfItensPerPage
   );
+
 
   return (
     <Box>
@@ -55,12 +61,7 @@ export default function TreatmentList() {
               )}
             </Heading>
             <Link href={"/treatments/create"} passHref>
-              <Button
-                as="a"
-                size="sm"
-                fontSize={"sm"}
-                colorScheme="pink"
-              >
+              <Button as="a" size="sm" fontSize={"sm"} colorScheme="pink">
                 <Icon as={RiAddLine} fontSize="28" />
                 Criar novo Tratamento
               </Button>
@@ -78,10 +79,13 @@ export default function TreatmentList() {
           ) : (
             treatments && (
               <>
-                <TreatmentTable treatmentData={treatments} isWideVersion={isWideVersion} />
+                <TreatmentTable
+                  treatmentData={treatments}
+                  isWideVersion={isWideVersion}
+                />
 
                 <Pagination
-                  totalCountOfRegisters={treatments.length}
+                  totalCountOfRegisters={dataFormated.length}
                   currentPage={treatmentCurrentPage}
                   registersPerPage={numberOfItensPerPage}
                   onPageClick={setTreatmentCurrentPage}

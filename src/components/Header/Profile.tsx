@@ -1,16 +1,15 @@
 import { Box, Flex, Text, Avatar } from "@chakra-ui/react";
-import { useContext } from "react";
-import { AuthContext, SignOut} from "../../services/hooks/useAuthentication";
+import { SignOut} from "../../services/hooks/useAuthentication";
 interface ProfileProps {
   showProfileData?: boolean;
+  userName: string;
+  name:string;
 }
 
 
 
-
-export function Profile({ showProfileData = true }: ProfileProps) {
+export function Profile({ showProfileData = true, userName, name }: ProfileProps) {
   function HandleSignOut(){
-    console.log("Fora")
     SignOut();
   }
 
@@ -18,16 +17,21 @@ export function Profile({ showProfileData = true }: ProfileProps) {
     <Flex align={"center"} ml="auto">
       {showProfileData && (
         <Box mr="4" textAlign="right">
-          <Text>Rafael Chuman</Text>
+          <Text>{userName}</Text>
           <Text color={"gray.300"} fontSize="small">
-            rafael.chuman@gmail.com
+            {name}
           </Text>
         </Box>
       )}
       <Avatar
         onClick={HandleSignOut}
         size={"md"}
-        name="Chuman"
+        name={userName}
+        title="Logout"
+        _hover={{
+          filter:'grayscale(100%)'
+        }}
+        transition="filter 1000ms linear"
         src="http://github.com/rafaelChuman.png"
       ></Avatar>
     </Flex>

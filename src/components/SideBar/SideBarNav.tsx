@@ -8,7 +8,7 @@ export function SideBarNav() {
     <Stack spacing="12" align="flex-start">
       <NavSection title="Geral">
         <NavLink href="/dashboard" icon={RiDashboardLine} navComponent="Dashboard" />
-        <NavLink href="/users" icon={RiContactsLine} navComponent="Usuários" />
+        <NavLink href="/users" icon={RiContactsLine} navComponent="Clientes" />
       </NavSection>
       <NavSection title="Administração">
         <Stack spacing="4" mt="8" align="stretch">

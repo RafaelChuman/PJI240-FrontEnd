@@ -1,6 +1,7 @@
 import { Td, Tr, Text, Box, Button, Icon } from "@chakra-ui/react";
 import { RiPencilLine } from "react-icons/ri";
 import { TreatmentGroupedByTreatmentId } from "../../services/hooks/useTreatments";
+import { convertToBRL } from "../../services/utils";
 
 interface TableLineProps {
   treatment: TreatmentGroupedByTreatmentId | undefined;
@@ -11,7 +12,7 @@ export function TreatmentTableLine({
   treatment,
   isWideVersion = true,
 }: TableLineProps) {
-  if (!treatment) {
+  if (!treatment || !treatment.products.length) {
     return <></>;
   }
 
@@ -31,10 +32,11 @@ export function TreatmentTableLine({
           {treatment.products.map((data) => {
             return (
               <>
-                <Text fontWeight="bold">
+                <Text key={`'Tratamentos${treatment.id}''`} fontWeight="bold">
                   {data.quantityOfProductPerDay} {data.product?.quantityUnit}{" "}
                   Por Dia
                 </Text>
+                <Text fontWeight="bold"> &nbsp;</Text>
               </>
             );
           })}
@@ -46,8 +48,10 @@ export function TreatmentTableLine({
           {treatment.products.map((data) => {
             return (
               <>
-                <Text fontWeight="bold">{data.product?.name}</Text>
-                <Text fontWeight="bold">
+                <Text key={`'Produtos${treatment.id}''`} fontWeight="bold">
+                  {data.product?.name}
+                </Text>
+                <Text fontWeight="bold" color={"gray.300"}>
                   {data.product?.quantityValue} {data.product?.quantityUnit}
                 </Text>
               </>
@@ -60,15 +64,10 @@ export function TreatmentTableLine({
           {treatment.products.map((data) => {
             return (
               <>
-                {
-                  <Text fontWeight="bold">
-                    {
-                    Intl.NumberFormat("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
-                    }).format(parseInt(data.product?.value || "0"))}
-                  </Text>
-                }
+                <Text key={`'Valor${treatment.id}''`} fontWeight="bold">
+                  {convertToBRL( data.product?.value)}
+                </Text>
+                <Text fontWeight="bold"> &nbsp;</Text>
               </>
             );
           })}

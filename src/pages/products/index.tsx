@@ -20,7 +20,7 @@ import { ProductTable } from "../../components/products/ProductTable";
 import { returnPaginatedData } from "../../services/utils";
 
 
-const numberOfItensPerPage = 10;
+const numberOfItensPerPage = 5;
 
 export default function ProductList() {
   const { data, isLoading, isFetching, error } = useProducts();
@@ -74,12 +74,12 @@ export default function ProductList() {
               <Text>Falha ao Obter Dados dos Produtos</Text>
             </Flex>
           ) : (
-            products && (
+            products && data && (
               <>
                 <ProductTable productData={products} isWideVersion={isWideVersion} />
 
                 <Pagination
-                  totalCountOfRegisters={products.length}
+                  totalCountOfRegisters={data.length}
                   currentPage={productCurrentPage}
                   registersPerPage={numberOfItensPerPage}
                   onPageClick={setProductCurrentPage}

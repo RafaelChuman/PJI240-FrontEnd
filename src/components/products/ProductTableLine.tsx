@@ -1,4 +1,4 @@
-import { Td, Tr, Text, Box, Button, Icon } from "@chakra-ui/react";
+import { Td, Tr, Text, Box, Button, Icon, Image } from "@chakra-ui/react";
 import { RiPencilLine } from "react-icons/ri";
 import { Product } from "../../services/hooks/useProducts";
 
@@ -7,10 +7,12 @@ interface TableLineProps {
   isWideVersion: boolean | undefined;
 }
 
-export function ProductTableLine({product,isWideVersion = true,}: TableLineProps) {
-  if (!product)
-  {
-    return <></>
+export function ProductTableLine({
+  product,
+  isWideVersion = true,
+}: TableLineProps) {
+  if (!product) {
+    return <></>;
   }
 
   return (
@@ -23,11 +25,24 @@ export function ProductTableLine({product,isWideVersion = true,}: TableLineProps
           <Text fontWeight="bold">{product.name}</Text>
         </Box>
       </Td>
-      {isWideVersion && <Td>{product.image}</Td>}
+      {isWideVersion && (
+        <Td>
+          <Image
+            borderRadius={'4px'}
+            border="1px"
+            borderColor={"gray.900"}
+            src={product.image}
+            alt={product.name}
+            boxSize="150px"
+            objectFit="cover"
+          ></Image>{" "}
+        </Td>
+      )}
       <Td>
         <Box>
-          <Text fontWeight="bold">{product.quantityValue}</Text>
-          <Text fontWeight="bold">{product.quantityUnit}</Text>
+          <Text fontWeight="bold">
+            {product.quantityValue} {product.quantityUnit}
+          </Text>
         </Box>
       </Td>
       <Td>

@@ -81,8 +81,6 @@ export default function CreateProduct() {
     if(!values.categoriesId)values.categoriesId = categoryValue;
     if(!values.quantityUnit)values.quantityUnit = unitValue;
 
-    console.log(values)
-
     await creatProduct.mutateAsync(values);
     router.push("/products");
   };

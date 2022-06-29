@@ -23,7 +23,7 @@ export function CategoryTableLine({category , isWideVersion = true}: TableLinePr
           <Text fontWeight="bold">{category.name}</Text>
           </Box>
       </Td>
-      {isWideVersion && <Td>{category.created_at}</Td>}
+      {isWideVersion && <Td>{category.createdAt}</Td>}
       <Td>
         <Button
           size="sm"

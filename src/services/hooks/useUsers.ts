@@ -14,6 +14,29 @@ export interface User {
     isAdmin: boolean;
   }
 
+
+  export interface UserGroupedByData {
+    count: number;
+    date_trunc: Date;
+  }
+
+
+  export async function getUsersByMonth(): Promise<UserGroupedByData[]> {
+    const { data } = await api.get(`users/?groupByMonth=True`);
+  
+    const formatedData = data.map((user: UserGroupedByData) => {
+      return {
+        count: user.count,
+        date_trunc: new Date(user.date_trunc).toLocaleDateString("pt-BR", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "2-digit",
+        }),
+      };
+    });
+    return formatedData;
+  }
+
 export async function getUsers(): Promise<User[]> {
   const { data } = await api.get("users");
 
@@ -40,6 +63,12 @@ export async function getUsers(): Promise<User[]> {
 
 export function useUsers() {
   return useQuery("users", getUsers, {
+    staleTime: 1000 * 30, //30 Seconds
+  });
+}
+
+export function useUsersByMonth() {
+  return useQuery("UsersByMonth", getUsersByMonth, {
     staleTime: 1000 * 30, //30 Seconds
   });
 }

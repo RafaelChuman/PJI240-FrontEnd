@@ -34,7 +34,6 @@ const Home = () => {
     }
     if (response.token != undefined) {
       //setErrorLogin(response.token.data.token);
-      console.log('Redirectiong to /DashBoard');
       router.push('/dashboard');
     }
     

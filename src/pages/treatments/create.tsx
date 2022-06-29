@@ -86,7 +86,8 @@ export default function CreateTreatment() {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries("treatments");
+        queryClient.invalidateQueries("Treatments");
+    
       },
     }
   );
@@ -113,7 +114,7 @@ export default function CreateTreatment() {
     if (!values.usersId) values.usersId = usersComboBoxValue;
 
     await creatTreatment.mutateAsync(values);
-    //router.push("/treatments");
+    router.push("/treatments");
   };
 
   return (

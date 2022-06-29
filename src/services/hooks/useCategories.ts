@@ -4,7 +4,7 @@ import { api } from "../api";
 export interface Category {
   id: string;
   name: string;
-  created_at: string;
+  createdAt: string;
 }
 
 export async function getCategories(): Promise<Category[]> {
@@ -14,7 +14,7 @@ export async function getCategories(): Promise<Category[]> {
     return {
       id: category.id,
       name: category.name,
-      created_at: new Date(category.created_at).toLocaleDateString("pt-BR", {
+      createdAt: new Date(category.createdAt).toLocaleDateString("pt-BR", {
         day: "2-digit",
         month: "long",
         year: "numeric",

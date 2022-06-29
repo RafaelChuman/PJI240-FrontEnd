@@ -1,5 +1,6 @@
 import { useQuery } from "react-query";
 import { api } from "../api";
+import { convertToBRL } from "../utils";
 import { Category } from "./useCategories";
 
 export const ProductUnitOptions = [
@@ -33,6 +34,8 @@ export async function getProducts(): Promise<Product[]> {
   const { data } = await api.get("products");
 
   const formatedData = data.map((product: Product) => {
+
+
     return {
       id :            product.id,
       categoriesId:   product.categoriesId,
@@ -41,8 +44,9 @@ export async function getProducts(): Promise<Product[]> {
       image:          product.image,
       quantityValue:  product.quantityValue,
       quantityUnit:   product.quantityUnit,
-      value:          product.value,
+      
       category:       product.category,
+      value:          convertToBRL(product.value),      
     };
   });
   return formatedData;

@@ -10,30 +10,40 @@ interface PaginationProps {
 
 const siblingCount = 1;
 
-function pagesToShow(totalCountOfRegisters: number, registersPerPage: number, currentPage: number): number[]{
-  const lastPage = Math.ceil(totalCountOfRegisters / registersPerPage);
+function pagesToShow(
+  totalCountOfRegisters: number,
+  registersPerPage: number,
+  currentPage: number
+): number[] {
+
+  let lastPage = (totalCountOfRegisters / registersPerPage) | 0;
+  if (totalCountOfRegisters % registersPerPage > 0) {
+    lastPage++;
+  }
 
   const siblingsPages = 1;
   const firstPage = 1;
 
   const numberPagesToLastPage =
-    lastPage - currentPage > siblingsPages ? siblingsPages : lastPage - currentPage;
+    lastPage - currentPage > siblingsPages
+      ? siblingsPages
+      : lastPage - currentPage;
 
   const numberPagesToFirstPage =
     currentPage - 1 > siblingsPages ? siblingsPages : currentPage - 1;
 
-  let pagesGenerated = [...new Array(numberPagesToFirstPage + 1 + numberPagesToLastPage)].map(
-    (_, index) => {
-      return currentPage - numberPagesToFirstPage + index;
-    }
-  );
-  
+  let pagesGenerated = [
+    ...new Array(numberPagesToFirstPage + 1 + numberPagesToLastPage),
+  ].map((_, index) => {
+    return currentPage - numberPagesToFirstPage + index;
+  });
+
   if (pagesGenerated[0] != firstPage) {
-    pagesGenerated = [firstPage, ...pagesGenerated]
+    pagesGenerated = [firstPage, ...pagesGenerated];
   }
 
-  if (pagesGenerated[pagesGenerated.length-1] != lastPage) {
-    pagesGenerated.push(lastPage)
+  if (pagesGenerated[pagesGenerated.length - 1] != lastPage) {
+    pagesGenerated.push(lastPage);
   }
 
   return pagesGenerated;
@@ -43,10 +53,19 @@ export function Pagination({
   totalCountOfRegisters,
   registersPerPage = 10,
   currentPage = 1,
-  onPageClick
+  onPageClick,
 }: PaginationProps) {
+  const pages = pagesToShow(
+    totalCountOfRegisters,
+    registersPerPage,
+    currentPage
+  );
 
-  const pages  = pagesToShow(totalCountOfRegisters, registersPerPage, currentPage);
+  const firtItem = registersPerPage * (currentPage - 1) + 1;
+  const lastItem =
+    registersPerPage * currentPage > totalCountOfRegisters
+      ? totalCountOfRegisters
+      : registersPerPage * currentPage;
 
   return (
     <Stack
@@ -57,14 +76,28 @@ export function Pagination({
       spacing={"6"}
     >
       <Box>
-        <strong> 0</strong> - <strong> 10</strong> de 100
+        <strong> {firtItem} </strong> - <strong> {lastItem} </strong> de{" "}
+        {totalCountOfRegisters}
       </Box>
       <Stack direction={"row"} spacing="2">
         {pages.map((page) => {
           if (currentPage == page) {
-            return <PaginationItem key={page} isCurrent number={page} onPageClick={onPageClick}/>;
+            return (
+              <PaginationItem
+                key={page}
+                isCurrent
+                number={page}
+                onPageClick={onPageClick}
+              />
+            );
           } else {
-            return <PaginationItem key={page} number={page} onPageClick={onPageClick}/>;
+            return (
+              <PaginationItem
+                key={page}
+                number={page}
+                onPageClick={onPageClick}
+              />
+            );
           }
         })}
       </Stack>

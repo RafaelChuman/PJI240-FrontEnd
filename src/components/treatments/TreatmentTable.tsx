@@ -24,7 +24,8 @@ export function TreatmentTable({ treatmentData, isWideVersion }: TreatmentTableP
         </Tr>
       </Thead>
       <Tbody>
-        {treatmentData ? (
+      
+        {treatmentData !== undefined ? (          
           treatmentData.map((treatment) => {
             return (
               <TreatmentTableLine
@@ -35,7 +36,7 @@ export function TreatmentTable({ treatmentData, isWideVersion }: TreatmentTableP
             );
           })
         ) : (
-          <TreatmentTableLine treatment={undefined}  isWideVersion={false} />
+          <TreatmentTableLine key="0" treatment={undefined}  isWideVersion={false} />
         )}
       </Tbody>
     </Table>
